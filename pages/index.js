@@ -52,6 +52,8 @@ class Home extends Component {
         res = await db.getByFilter({ start, end, page, search, req, sort })
       } else {
         res = await db.getAll({ page, search, req, sort })
+
+        console.dir(res, { colors: true, depth: null })
       }
     } catch (e) {
       throw e
@@ -98,7 +100,7 @@ class Home extends Component {
               min-height: 100%;
               width: 100%;
             }
-            input[type=date] {
+            input[type='date'] {
               border: none;
               width: 100%;
               font-size: 20px;
