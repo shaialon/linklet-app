@@ -8,11 +8,11 @@ module.exports = {
     console.log(dev)
     if (!dev) {
       // preact
-      console.log('> Using Preact instead of React')
-      config.resolve.alias = {
-        react: 'preact-compat/dist/preact-compat',
-        'react-dom': 'preact-compat/dist/preact-compat'
-      }
+      // console.log('> Using Preact instead of React')
+      // config.resolve.alias = {
+      //   react: 'preact-compat/dist/preact-compat',
+      //   'react-dom': 'preact-compat/dist/preact-compat'
+      // }
       // Service Worker
       config.plugins.push(
         new SWPrecacheWebpackPlugin({
