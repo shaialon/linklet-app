@@ -2,7 +2,8 @@ import React from 'react'
 import Router from 'next/router'
 import Autosuggest from 'react-autosuggest'
 import isMobile from 'ismobilejs'
-import fetch from 'isomorphic-unfetch'
+import db from '../lib/db'
+import _uniq from 'lodash/uniq'
 
 // calculate suggestions for any given input value.
 function getSuggestions (value) {
@@ -11,7 +12,8 @@ function getSuggestions (value) {
   return inputLength === 0
     ? []
     : window.tags.filter(
-        tag => tag.toLowerCase().slice(0, inputLength) === inputValue
+        // tag => tag.toLowerCase().slice(0, inputLength) === inputValue // prefix...
+        tag => tag.toLowerCase().indexOf(inputValue) >= 0 // contains
       )
 }
 
@@ -37,27 +39,7 @@ export default class Search extends React.Component {
     }
   }
   componentDidMount () {
-    window.tags = [
-      'web',
-      'javascript',
-      'code',
-      'programming',
-      'learning',
-      'development',
-      'react',
-      'software',
-      'apps',
-      'css',
-      'developers',
-      'app'
-    ]
-    fetch(
-      'https://cdn.rawgit.com/vinaypuppal/linklet-app/aca4b5d1/lib/tags.json'
-    )
-      .then(r => r.json())
-      .then(data => {
-        window.tags = data
-      })
+    window.tags = []
   }
   componentWillReceiveProps (nextProps) {
     this.setState({
@@ -76,6 +58,21 @@ export default class Search extends React.Component {
     this.setState({
       suggestions: getSuggestions(value)
     })
+
+    db
+      .getAll({
+        search: value
+      })
+      .then(suggestions => {
+        // console.dir(suggestions.data.links.map(item => item.title), {colors: true, depth: null});
+        const uniqItems = _uniq(suggestions.data.links.map(item => item.title))
+        if (uniqItems.length > 0) {
+          window.tags = _uniq(suggestions.data.links.map(item => item.title))
+          this.setState({
+            suggestions: getSuggestions(value)
+          })
+        }
+      })
   }
 
   // Autosuggest will call this function every time users clears input.
@@ -108,7 +105,7 @@ export default class Search extends React.Component {
       .catch(e => console.log(e))
   }
   render () {
-    console.log(isMobile.any)
+    // console.log(isMobile.any)
     const { suggestions, value } = this.state
     // Autosuggest will pass through all these props to the input field.
     const inputProps = {

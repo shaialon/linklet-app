@@ -53,7 +53,7 @@ class Home extends Component {
       } else {
         res = await db.getAll({ page, search, req, sort })
 
-        console.dir(res, { colors: true, depth: null })
+        // console.dir(res, { colors: true, depth: null })
       }
     } catch (e) {
       throw e
