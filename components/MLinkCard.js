@@ -43,7 +43,8 @@ export default class MLinkCard extends React.Component {
                 <Highlighter
                   highlightClassName='highlight'
                   searchWords={[search]}
-                  textToHighlight={truncateString(link.description, 90)}
+                  textToHighlight={truncateString(link.description, 200)}
+                  // textToHighlight={link.description}
                 />
               ) : (
                 'No Description'
@@ -55,9 +56,12 @@ export default class MLinkCard extends React.Component {
               <div className='image'>
                 <LazyLoad height={80} offset={100}>
                   <img
-                    src={`//images.weserv.nl/?url=${link.image
-                      .replace('http://', '')
-                      .replace('https://', '')}&w=80&h=80`}
+                    src={
+                      link.image ||
+                      `//images.weserv.nl/?url=${link.image
+                        .replace('http://', '')
+                        .replace('https://', '')}&w=80&h=80`
+                    }
                     alt={'No Img'}
                   />
                 </LazyLoad>
