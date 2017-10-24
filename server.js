@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const next = require('next')
 const cookieParser = require('cookie-parser')
+const Router = require('./routes').Router
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dir: '.', dev })
@@ -50,6 +51,17 @@ app
     // tos
     server.get('/tos', (req, res) =>
       res.sendFile(path.resolve('./static/tos.html'))
+    )
+
+    Router.forEachPattern((page, pattern, defaultParams) =>
+      server.get(pattern, (req, res) =>
+        app.render(
+          req,
+          res,
+          `/${page}`,
+          Object.assign({}, defaultParams, req.query, req.params)
+        )
+      )
     )
 
     server.get('*', (req, res) => handle(req, res))
