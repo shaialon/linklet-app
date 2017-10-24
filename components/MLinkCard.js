@@ -9,6 +9,7 @@ import FaHeart from 'react-icons/lib/fa/heart'
 import FaEye from 'react-icons/lib/fa/eye'
 import FaWA from 'react-icons/lib/fa/whatsapp'
 import FaExt from 'react-icons/lib/fa/external-link'
+import { Link } from '../routes'
 
 export default class MLinkCard extends React.Component {
   render () {
@@ -81,22 +82,9 @@ export default class MLinkCard extends React.Component {
         <div className='meta'>
           <div className='by'>
             {link._creator ? (
-              <a
-                className='by-user'
-                rel='noopener'
-                href={`https://github.com/${link._creator.username}`}
-                target='_blank'
-              >
-                {/* <LazyLoad height={20} offset={50}> */}
-                {/* <img */}
-                {/* src={`//images.weserv.nl/?url=${link._creator.avatarUrl */}
-                {/* .replace('http://', '') */}
-                {/* .replace('https://', '')}&w=20&h=20&shape=circle`} */}
-                {/* alt={link._creator.username} */}
-                {/* /> */}
-                {/* </LazyLoad> */}
+              <Link route={`/show/${link._id}`}>
                 <span>{link._creator.username}</span>
-              </a>
+              </Link>
             ) : (
               <span className='wa'>
                 <FaWA size={20} />Added From Whatsapp Group

@@ -1,10 +1,13 @@
 const express = require('express')
 const path = require('path')
 const next = require('next')
+const routes = require('./routes')
 const cookieParser = require('cookie-parser')
 
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dir: '.', dev })
+
+const handler = routes.getRequestHandler(app)
 const handle = app.getRequestHandler()
 
 app
@@ -52,7 +55,8 @@ app
       res.sendFile(path.resolve('./static/tos.html'))
     )
 
-    server.get('*', (req, res) => handle(req, res))
+    server.get('*', (req, res) => handler(req, res))
+    // server.get('*', (req, res) => handle(req, res))
 
     server.listen(process.env.PORT || 3000, err => {
       if (err) throw err
